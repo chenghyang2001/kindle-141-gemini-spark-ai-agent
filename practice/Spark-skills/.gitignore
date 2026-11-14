@@ -1,0 +1,27 @@
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.local
+*.key
+*.pem
+credentials.json
+token.json
+
+*.bak
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+
+# 音訊素材（授權未確認前不散布）
+*.mp3
+*.wav
+*.m4a
+*.aac

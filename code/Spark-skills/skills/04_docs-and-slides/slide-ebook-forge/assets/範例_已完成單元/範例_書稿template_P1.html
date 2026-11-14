@@ -1,0 +1,487 @@
+<meta charset="utf-8">
+<title>專案一：影片轉 Skill × 網站復刻</title>
+<style>
+  :root{
+    --ink:#24211d; --ink-soft:#5b544c; --line:#e2ddd4;
+    --accent:#e2551f; --accent-soft:#fdf0e9;
+    --paper:#fffdf9; --code-bg:#faf7f2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e8e4dc;color:var(--ink);
+       font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;line-height:1.85;}
+  .page{position:relative;background:var(--paper);width:210mm;min-height:297mm;
+        margin:18px auto;padding:21mm 18mm 20mm;box-shadow:0 6px 28px rgba(0,0,0,.14);}
+  .hd{position:absolute;top:9mm;left:18mm;right:18mm;display:flex;justify-content:space-between;
+      font-size:11px;color:var(--ink-soft);letter-spacing:.06em;
+      border-bottom:1px solid var(--line);padding-bottom:5px;}
+  .ft{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;
+      font-size:11px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:5px;}
+  .pg{font-variant-numeric:tabular-nums}
+  .cover{display:flex;flex-direction:column;justify-content:center;}
+  .cover .no{font-size:92px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-.02em}
+  .cover h1{font-size:32px;margin:14px 0 6px;letter-spacing:.01em;line-height:1.4}
+  .cover .sub{font-size:17px;color:var(--ink-soft);margin-bottom:34px}
+  .cards{display:flex;gap:12px}
+  .card{flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+  .card b{display:block;font-size:12px;color:var(--accent);letter-spacing:.08em;margin-bottom:4px}
+  h2{font-size:23px;margin:0 0 14px;padding-left:13px;border-left:5px solid var(--accent)}
+  h3{font-size:17px;margin:20px 0 8px;color:var(--accent)}
+  p{margin:0 0 12px}
+  .lead{background:var(--accent-soft);border-left:4px solid var(--accent);
+        padding:13px 16px;border-radius:0 8px 8px 0;margin:0 0 16px}
+  .note{border:1px dashed var(--line);border-radius:8px;padding:12px 15px;
+        background:#fff;margin:0 0 14px;font-size:15px}
+  .warn{border:1px solid #f0c9a8;background:#fff8f2;border-radius:8px;
+        padding:12px 15px;margin:0 0 14px;font-size:15px}
+  table{width:100%;border-collapse:collapse;margin:0 0 15px;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft);font-weight:700}
+  ul,ol{margin:0 0 13px;padding-left:22px}
+  li{margin-bottom:5px}
+  .shot{display:block;border:1px solid var(--line);border-radius:8px;margin:0 auto 6px}
+  .cap{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:16px}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:9px;
+      padding:13px 15px;overflow:auto;margin:0 0 13px;
+      font:12.5px/1.62 "Cascadia Mono",Consolas,"Courier New",monospace;}
+  pre .k{color:#0b6fb8;font-weight:700}
+  pre .s{color:#1d7a4d}
+  pre .n{color:#b0431a}
+  pre .c{color:#8d867c;font-style:italic}
+  pre .f{color:#7c3aad;font-weight:700}
+  .prompt{background:#fff;border:2px solid var(--accent);border-radius:10px;
+          padding:14px 16px;margin:0 0 14px;font-size:14.5px;white-space:pre-wrap;
+          font-family:"Microsoft JhengHei",sans-serif}
+  .check{list-style:none;padding-left:2px}
+  .check li:before{content:"□ ";color:var(--accent);font-weight:700}
+  .two{display:flex;gap:13px;margin-bottom:14px}
+  .two>div{flex:1;border:1px solid var(--line);border-radius:9px;padding:12px 14px;font-size:14.5px}
+  .bad{background:#fff6f6;border-color:#f0c4c4}
+  .good{background:#f4fbf6;border-color:#bfe3cb}
+  .two b{display:block;margin-bottom:6px}
+  @media screen{
+    body.deck .page{display:none;margin:0;width:100vw;min-height:100vh;padding:6vh 8vw;
+                    box-shadow:none;overflow:auto}
+    body.deck .page.on{display:block}
+    body.deck .nav{position:fixed;right:16px;bottom:14px;background:#fff;border:1px solid var(--line);
+                   border-radius:999px;padding:7px 15px;font-size:13px;color:var(--ink-soft);
+                   box-shadow:0 2px 10px rgba(0,0,0,.1);z-index:9}
+  }
+  @media print{
+    body{background:#fff}
+    .page{margin:0;box-shadow:none;page-break-after:always;width:auto;min-height:auto}
+    .nav{display:none}
+    @page{size:A4;margin:0}
+  }
+</style>
+
+<!-- ===== 封面 ===== -->
+<section class="page cover">
+  <div class="no">P1</div>
+  <h1>影片轉 Skill × 互動網站復刻</h1>
+  <div class="sub">把「看得到卻拿不到原始碼」的網站，變成 AI 能重複使用的技能包</div>
+  <div class="cards">
+    <div class="card"><b>難度</b>★★☆☆☆</div>
+    <div class="card"><b>要準備的</b>瀏覽器、Python、FFmpeg</div>
+    <div class="card"><b>需要憑證</b>完全不需要</div>
+  </div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span></span></div>
+</section>
+
+<!-- ===== ① 先看成果 ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>先看成果</span></div>
+  <h2>① 先看成果</h2>
+  <div class="lead">這是這堂課結束時，你電腦裡會有的東西——一個自己做出來的互動網站。</div>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m05.png" alt="">
+  <div class="cap">▲ 完成的「教師 AI 指令庫」：上面選大類，下面選標籤，卡片跟著換</div>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m06.png" alt="">
+  <div class="cap">▲ 每張卡片可以展開看全文，按一下就複製到剪貼簿</div>
+  <p>但真正的重點不是這個網站。是你會學到一套方法：<b>把一個只能看、不能拿的網站，
+  變成 AI 看得懂的規格書</b>，然後讓 AI 照著做出來。</p>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">02</span></div>
+</section>
+
+<!-- ===== ② Vibe Coding ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>把需求講清楚</span></div>
+  <h2>② 把需求講清楚</h2>
+  <p>同一件事，換一種講法，AI 給你的東西天差地遠。先看這兩種問法的差別。</p>
+  <div class="two">
+    <div class="bad"><b>❌ 這樣問</b>幫我做一個跟這個網站一樣的網頁。</div>
+    <div class="good"><b>✅ 這樣問</b>我給你一份 SKILL.md 和一個 references 資料夾，
+      裡面是我操作某個網站時抽出來的畫面。請你讀完之後，照著裡面寫的版面規則與互動規則，
+      做一個單一 HTML 檔的網站，內容用我自己的主題。</div>
+  </div>
+  <p>差在哪裡？左邊要 AI「猜」，右邊給 AI「規格」。而這份規格，
+  就是我們今天要做的東西。</p>
+
+  <h3>本單元完整指令（做完 references 之後，整段複製給 AI）</h3>
+  <div class="prompt">請讀取 references 資料夾裡的所有圖片，以及 references_index.md。
+
+這些圖是我操作一個網站時抽出來的關鍵畫面。請幫我做兩件事：
+
+第一，寫一份 SKILL.md，內容要包含：
+1. 這個網站的版面規則（顏色、字體、圓角、間距）
+2. 有哪些互動（按鈕、篩選、展開、複製、搜尋）
+3. 每個互動的預期行為（點下去之後應該發生什麼）
+4. 一份驗收清單，讓我可以逐項確認有沒有做到
+
+第二，依照這份 SKILL.md，做出一個單一 HTML 檔的網站。
+要求：CSS 和 JS 都寫在同一個檔案裡，不要用任何框架或打包工具，
+用瀏覽器直接打開就能跑。
+
+內容不要抄原網站，請用「教師常用的 AI 指令」當主題，我自己會再改。</div>
+  <div class="note"><b>為什麼要這樣寫：</b>整段話裡沒有半個技術術語，
+  但把「輸入是什麼」「要產出什麼」「有什麼限制」「怎麼算做完」全講清楚了。
+  這就是本課程一直強調的：<b>不用會寫程式，但要會把需求講到沒有模糊空間。</b></div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">03</span></div>
+</section>
+
+<!-- ===== ③ 這個單元在做什麼 ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>單元說明</span></div>
+  <h2>③ 這個單元在做什麼</h2>
+  <h3>學完你會</h3>
+  <ul>
+    <li>把一段螢幕錄影，自動抽成一疊「有代表性」的畫面</li>
+    <li>把這疊畫面整理成 AI 讀得懂的 references</li>
+    <li>讓 AI 寫出一份可以重複使用的 SKILL.md</li>
+    <li>用這份 SKILL.md 產生一個真的能跑的互動網站</li>
+  </ul>
+  <h3>整體流程</h3>
+  <pre>螢幕錄影（Win+G 或 OBS）
+      ↓
+FFmpeg 抓出畫面有變化的影格        ← 本機做，不用帳號
+      ↓
+去掉長得太像的重複圖
+      ↓
+references/ ＋ 索引檔
+      ↓
+交給 Claude Code 或 Codex 讀圖     ← 用你已經有的工具
+      ↓
+產出 SKILL.md
+      ↓
+依 SKILL.md 產生網站</pre>
+  <h3>這一課真正的觀念</h3>
+  <div class="lead">我們不是在教你用某一個工具，是在教你<b>自己建一條產線</b>。
+  市面上有現成的軟體可以做類似的事，但它要付費帳號，而且中間發生什麼你看不到。
+  自己建的話：每一步都看得見、不用花錢、想改就改。</div>
+  <h3>可以用在哪裡</h3>
+  <p>學會這條產線之後，任何「我看過某個東西，想做一個類似的」都適用：
+  課程網站、報名表單、資料查詢頁、活動介紹頁。錄影、抽幀、寫規格、產生，流程完全一樣。</p>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">04</span></div>
+</section>
+
+<!-- ===== ④ 老師說 ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>動手之前</span></div>
+  <h2>④ 動手之前，先看這裡</h2>
+  <p>這一課看起來步驟不少，但每一步都很短。真正花時間的只有錄影那一段，
+  而那一段你只是打開網站點一點，不需要任何技術。</p>
+
+  <h3>先讓你放心的三件事</h3>
+  <ul>
+    <li><b>不用寫程式。</b>你要做的是「錄影」和「跟 AI 說話」，程式碼由 AI 寫。</li>
+    <li><b>不用申請任何帳號。</b>整條產線只用到 FFmpeg 和你已經有的 AI 工具。</li>
+    <li><b>做壞了不會怎樣。</b>所有東西都在你自己的資料夾裡，刪掉重來就好。</li>
+  </ul>
+
+  <h3>卡住了先看這三招</h3>
+  <table>
+    <tr><th style="width:32%">狀況</th><th>先試這個</th></tr>
+    <tr><td>執行程式說「找不到 ffmpeg」</td>
+        <td>裝完 FFmpeg 要<b>關掉終端機再重開</b>，電腦才找得到它</td></tr>
+    <tr><td>抽出來的圖太少或太多</td>
+        <td>打開程式最上面的設定區，把 <code>SCENE_THRESHOLD</code> 調小（抽多）或調大（抽少）</td></tr>
+    <tr><td>AI 產出的網站怪怪的</td>
+        <td>不要重問一次。直接說「第幾點沒做到，請修正」，接著改比重來快</td></tr>
+  </table>
+
+  <div class="warn"><b>錄影前請先確認：</b>畫面上不要有你的密碼、金鑰、私人信件或別人的個資。
+  錄影會把整個畫面錄下來，之後這些圖還要交給 AI。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">05</span></div>
+</section>
+
+<!-- ===== ⑤ 跟著做 (1) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>跟著老師做一次</span></div>
+  <h2>⑤ 跟著老師做一次</h2>
+
+  <h3>步驟 0：先確認電腦有 Python</h3>
+  <p>打開<b>終端機</b>（按鍵盤左下角的 <b>Win 鍵</b>，直接輸入「終端機」三個字，
+  按 Enter 就會打開一個黑色或藍色的視窗）。在裡面輸入這一行後按 Enter：</p>
+  <pre>python --version</pre>
+  <table>
+    <tr><th style="width:46%">看到什麼</th><th>代表</th></tr>
+    <tr><td><code>Python 3.12.x</code>（有版本號就好）</td><td>已經有了，直接做步驟 1</td></tr>
+    <tr><td>跳出「Microsoft Store」視窗</td><td>還沒裝。關掉它，改用下面的方式裝</td></tr>
+    <tr><td>說找不到 python</td><td>還沒裝</td></tr>
+  </table>
+  <p>沒有的話，在終端機貼上這一行安裝：</p>
+  <pre>winget install Python.Python.3.12</pre>
+  <div class="warn"><b>裝完一定要把終端機視窗關掉、再重新打開一次。</b>
+  這是最多人卡住的地方——不重開的話，電腦還是會說「找不到 python」。</div>
+
+  <h3>步驟 1：裝 FFmpeg（負責處理影片的工具）</h3>
+  <p>同樣在終端機貼上這一行：</p>
+  <pre>winget install Gyan.FFmpeg</pre>
+  <div class="warn"><b>裝完一樣要把終端機關掉再重開。</b>
+  重開後輸入 <code>ffmpeg -version</code>，看到一堆版本資訊就代表成功了
+  （內容看不懂沒關係，有跑出東西就對了）。</div>
+
+  <h3>先把檔案放好</h3>
+  <p>在桌面上開一個新資料夾，名字取 <code>AI課程</code>。
+  等一下錄好的影片、下載的程式，<b>全部放在這個資料夾裡</b>。
+  放在一起，指令才不會找不到檔案。</p>
+
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">06</span></div>
+</section>
+
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>跟著老師做一次</span></div>
+  <h3>步驟 2：錄一段操作影片</h3>
+  <p>打開你想參考的網站，按 <b>Win + G</b> 叫出 Windows 內建的錄影工具，
+  按下錄影鈕，然後把網站正常操作一遍：點分頁、點按鈕、往下捲、切換分類。
+  <b>錄 1～2 分鐘就夠了</b>，錄完按停止。</p>
+  <div class="note"><b>錄的時候動作放慢一點。</b>每個畫面停個一兩秒再點下一個。
+  太快的話抽出來的圖會全是動畫做到一半的模糊畫面。<br>
+  錄好的影片預設會存在「本機 → 影片 → 擷取」資料夾，
+  把它<b>複製到桌面的 AI課程 資料夾</b>。</div>
+
+  <h3>步驟 3：把影片變成一疊畫面</h3>
+  <p>這一步要在<b>剛才那個資料夾裡</b>開終端機。最簡單的方法：</p>
+  <ol>
+    <li>打開 <code>AI課程</code> 資料夾</li>
+    <li>在上方的網址列點一下，把裡面的文字整段刪掉</li>
+    <li>輸入 <code>cmd</code> 然後按 Enter</li>
+  </ol>
+  <p>會跳出終端機，而且已經在正確的位置了。接著輸入：</p>
+  <pre>python extract_keyframes.py 你的影片檔名.mp4</pre>
+  <div class="note"><b>檔名很長不想打？</b>輸入 <code>python extract_keyframes.py </code>
+  （最後留一個空白），然後<b>把影片檔直接用滑鼠拖進終端機視窗</b>，
+  檔名會自動填進去。按 Enter 就開始跑。</div>
+  <p>跑完會看到這樣的訊息，資料夾裡也會多出一個 <code>references</code>：</p>
+  <pre>正在抽取關鍵幀（門檻 0.3）...
+抽出 6 張
+去掉重複後剩下 6 張
+已產生索引：references\references_index.md</pre>
+  <div class="warn"><b>如果說「找不到 python」或「找不到 ffmpeg」</b>——
+  幾乎都是因為裝完沒有把終端機關掉重開。關掉再開一次就好。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">07</span></div>
+</section>
+
+<!-- ===== ⑤ 跟著做 (2) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>跟著老師做一次</span></div>
+  <h3>步驟 4：填索引，告訴 AI 每張圖是什麼</h3>
+  <p>打開 <code>references/references_index.md</code>，把「（請填寫）」換成你自己的說明。
+  一句話就好，例如：</p>
+  <pre>| `kf_01.png` | 進站跳出的歡迎視窗，背景模糊，有兩顆按鈕 |
+| `kf_03.png` | 資料庫頁：雙層篩選，上面大類、下面標籤 |</pre>
+  <div class="note">這一步不能跳過。AI 看得到圖，但不知道<b>哪張圖對應哪個操作步驟</b>，
+  你的說明就是它的地圖。</div>
+
+  <h3>步驟 5：把整包交給 AI</h3>
+  <p>把第 ② 節那段完整指令複製給 Claude Code 或 Codex，它會產出 SKILL.md 和網站。</p>
+
+  <h3>步驟 6：打開成品，逐項驗收</h3>
+  <p>用瀏覽器打開產生出來的 HTML 檔。第一個看到的應該是歡迎視窗：</p>
+  <img class="shot" style="width:80%;margin:0 auto" src="real/annotated/m01.png" alt="">
+  <div class="cap">▲ 進站視窗：背景要有模糊效果，兩顆按鈕都要能按</div>
+  <p>關掉視窗後是首頁：</p>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m02.png" alt="">
+  <div class="cap">▲ 首頁：大標題、兩顆主要按鈕、三張說明卡</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">07</span></div>
+</section>
+
+<!-- ===== ⑤ 跟著做 (3) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>跟著老師做一次</span></div>
+  <h3>步驟 7：檢查雙層篩選</h3>
+  <p>這是整個網站最值得學的互動：<b>上面選大類，下面那排標籤會跟著整批換掉。</b></p>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m03.png" alt="">
+  <div class="cap">▲ 第一層是大類，第二層是這個大類底下的分類標籤</div>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m04.png" alt="">
+  <div class="cap">▲ 換一個大類，下面那排標籤整批換掉——這就是「雙層」的意思</div>
+
+  <h3>步驟 8：檢查展開與複製</h3>
+  <img class="shot" style="width:88%;margin:0 auto" src="real/annotated/m06.png" alt="">
+  <div class="cap">▲ 兩顆按鈕：展開看全文、複製整段指令</div>
+  <p>按下複製之後，按鈕文字要變成「已複製」，過一秒半再變回來。
+  <b>這個回饋很重要</b>——沒有它，使用者不知道到底複製到了沒有。</p>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m07.png" alt="">
+  <div class="cap">▲ 變成綠色的「已複製 ✓」，這樣使用者才安心</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">08</span></div>
+</section>
+
+<!-- ===== ⑤ 跟著做 (4) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>跟著老師做一次</span></div>
+  <h3>步驟 9：檢查搜尋與空狀態</h3>
+  <p>在搜尋框打字，卡片要即時過濾。打一個一定找不到的字，要出現提示：</p>
+  <img class="shot" style="width:90%;margin:0 auto" src="real/annotated/m08.png" alt="">
+  <div class="cap">▲ 找不到時要給提示，不能只留一片空白</div>
+  <div class="note"><b>這是很常被忽略的細節。</b>沒有空狀態提示的話，
+  使用者會以為網站壞了。要求 AI 補這個，只要一句話：「搜尋沒結果時請顯示提示訊息」。</div>
+
+  <h3>步驟 10：檢查手機版</h3>
+  <p>把瀏覽器視窗縮到很窄（或按 F12 切換到手機模式），畫面要自動變成單欄：</p>
+  <img class="shot" style="width:44%;margin:0 auto" src="real/annotated/m10.png" alt="">
+  <div class="cap">▲ 手機寬度下自動變單欄，不會出現左右捲動</div>
+
+  <h3>步驟 11：看一下使用原則頁</h3>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m09.png" alt="">
+  <div class="cap">▲ 第三個分頁：條列式的內容頁，用來確認分頁切換真的有換內容</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">09</span></div>
+</section>
+
+<!-- ===== ⑥ 程式碼 (1) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>程式碼與解說</span></div>
+  <h2>⑥ 程式碼全文與中文解說</h2>
+  <p>這支程式叫 <code>extract_keyframes.py</code>，做三件事：抽幀、去重複、產生索引。
+  下面把它一段一段拆開講。</p>
+  <h3>設定區與檢查 FFmpeg</h3>
+  <pre><!--G1--></pre>
+  <div class="note"><b>這段在做什麼：</b>最上面四個設定值就是這支程式的全部旋鈕。
+  下面的 <code>check_ffmpeg()</code> 先確認 FFmpeg 裝好了沒，沒裝就直接告訴你怎麼裝，
+  而不是丟一堆看不懂的錯誤訊息。<br>
+  <b>哪裡可以改成自己的：</b><code>SCENE_THRESHOLD</code> 是最常調的。
+  抽出來的圖太少就調小（例如 0.2），太多就調大（例如 0.5）。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">10</span></div>
+</section>
+
+<!-- ===== ⑥ 程式碼 (2) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>程式碼與解說</span></div>
+  <h3>第一步：叫 FFmpeg 抽出畫面有變化的影格</h3>
+  <pre><!--G2--></pre>
+  <div class="warn"><b>這裡有一個真的踩過的坑，值得記住。</b>
+  新版 FFmpeg（9.0 之後）把 <code>-vsync</code> 這個參數<b>移除了</b>，
+  改成 <code>-fps_mode</code>。但網路上幾乎所有教學都還寫著舊的寫法，
+  直接照抄就會失敗。<br>
+  所以這裡的寫法是：<b>先試新的，失敗再退回舊的</b>，新舊版本都能跑。<br>
+  <b>這就是為什麼「AI 給的答案要自己跑過一次」</b>——AI 學到的可能是舊寫法。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">11</span></div>
+</section>
+
+<!-- ===== ⑥ 程式碼 (3) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>程式碼與解說</span></div>
+  <h3>第二步：怎麼判斷兩張圖「長得像」</h3>
+  <pre><!--G3--></pre>
+  <div class="note"><b>這段在做什麼：</b>這是「感知雜湊」。
+  把圖片縮成很小的灰階圖，然後比較左右相鄰的像素誰比較亮，
+  得到一串 0 和 1。兩張圖的這串數字差越少，代表越像。<br>
+  比對整張圖的每個像素太慢，這個方法又快又夠用。<br>
+  <b>哪裡可以改成自己的：</b><code>SIMILAR_LIMIT</code> 越小越嚴格
+  （只有幾乎一模一樣才算重複），越大越寬鬆。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">12</span></div>
+</section>
+
+<!-- ===== ⑥ 程式碼 (4) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>程式碼與解說</span></div>
+  <h3>第三步：去掉重複、均勻取樣、重新命名</h3>
+  <pre><!--G4--></pre>
+  <div class="note"><b>這段在做什麼：</b>每張新圖都跟「已經留下來的圖」比一遍，
+  太像就刪掉。如果留下來還是太多張，就<b>均勻取樣</b>——
+  從頭到尾平均挑，而不是只取前面幾張，這樣才涵蓋整段操作流程。<br>
+  最後重新命名成 <code>kf_01</code>、<code>kf_02</code>，順序一眼看得懂。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">13</span></div>
+</section>
+
+<!-- ===== ⑥ 程式碼 (5) ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>程式碼與解說</span></div>
+  <h3>第四步：產生索引檔與主流程</h3>
+  <pre><!--G5--></pre>
+  <div class="note"><b>這段在做什麼：</b>產生一份表格式的索引檔，
+  讓你填「這張畫面在做什麼」。<b>這份索引是 AI 的地圖</b>，
+  它看得到圖，但要靠你的說明才知道每張圖對應哪個操作。<br>
+  最後的 <code>main()</code> 把四個步驟串起來，並在每一步都印出進度，
+  讓你知道程式跑到哪裡了。</div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">14</span></div>
+</section>
+
+<!-- ===== 補充：改成自己的 ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>用在你自己的場合</span></div>
+  <h2>用在你自己的場合，要改哪裡</h2>
+  <table>
+    <tr><th style="width:30%">你想做的</th><th>要改哪裡</th></tr>
+    <tr><td>抽出來的圖太少</td>
+        <td><code>SCENE_THRESHOLD</code> 從 0.3 調到 0.2 或 0.15</td></tr>
+    <tr><td>抽出來的圖太多、太雜</td>
+        <td><code>SCENE_THRESHOLD</code> 調到 0.4～0.5；或把 <code>MAX_KEYFRAMES</code> 調小</td></tr>
+    <tr><td>明明不一樣的畫面被當成重複刪掉</td>
+        <td><code>SIMILAR_LIMIT</code> 從 5 調小到 3</td></tr>
+    <tr><td>想做的不是網站，是操作教學</td>
+        <td>程式完全不用改。索引檔的說明改成寫「第幾步在做什麼」，
+            然後叫 AI 產出操作手冊而不是網站</td></tr>
+    <tr><td>網站要換成自己的主題</td>
+        <td>打開產出的 HTML，最上面有一段 <code>PROMPTS</code> 陣列，
+            改裡面的文字就好，不用動其他地方</td></tr>
+    <tr><td>想加新的分類</td>
+        <td>同樣在 HTML 上方的 <code>MAIN_CATS</code> 裡加一行</td></tr>
+  </table>
+  <div class="lead">這張表就是這條產線的價值：<b>下次要做別的東西，流程一模一樣，
+  只是換掉幾個設定值。</b></div>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">15</span></div>
+</section>
+
+<!-- ===== ⑦⑧ ===== -->
+<section class="page">
+  <div class="hd"><span>專案一 · 影片轉 Skill</span><span>驗收與下載</span></div>
+  <h2>⑦ 成果驗收清單</h2>
+  <p>逐項打勾，全部打完這一課就完成了。</p>
+  <h3>產線部分</h3>
+  <ul class="check">
+    <li>終端機輸入 <code>ffmpeg -version</code> 看得到版本號</li>
+    <li>錄好一段 1～2 分鐘的操作影片</li>
+    <li>執行抽幀程式，有產生 references 資料夾</li>
+    <li>資料夾裡有 kf_01、kf_02…等圖片</li>
+    <li>索引檔的「（請填寫）」都填上說明了</li>
+  </ul>
+  <h3>網站部分</h3>
+  <ul class="check">
+    <li>用瀏覽器打開 HTML，畫面正常不是空白</li>
+    <li>進站視窗會跳出來，背景是模糊的</li>
+    <li>兩顆按鈕都有作用，勾「不再顯示」後重整真的不跳了</li>
+    <li>三個分頁都能切換，內容確實不一樣</li>
+    <li>換大類時，下面那排標籤會整批換掉</li>
+    <li>點標籤會過濾卡片</li>
+    <li>卡片可以展開、可以收合</li>
+    <li>按複製會變成「已複製」，貼到記事本真的有東西</li>
+    <li>搜尋會即時過濾，打亂碼會出現找不到的提示</li>
+    <li>視窗縮窄後變單欄，沒有左右捲動</li>
+    <li>按 F12 打開主控台，沒有紅色錯誤</li>
+  </ul>
+  <h2 style="margin-top:24px">⑧ 程式碼下載</h2>
+  <p>本單元的檔案：</p>
+  <table>
+    <tr><th style="width:44%">檔名</th><th>是什麼</th></tr>
+    <tr><td><code>extract_keyframes.py</code></td><td>抽幀程式（159 行）</td></tr>
+    <tr><td><code>SKILL.md</code></td><td>技能包規格書</td></tr>
+    <tr><td><code>教師AI指令庫.html</code></td><td>完成的網站，可直接打開</td></tr>
+  </table>
+  <div class="ft"><span>阿亮老師 · AI Coding 實作課程</span><span class="pg">16</span></div>
+</section>
+
+<div class="nav">← → 翻頁</div>
+<script>
+  document.body.classList.add('deck');
+  var pages = document.querySelectorAll('.page'), i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(pages.length - 1, n));
+    pages.forEach(function(p, k){ p.classList.toggle('on', k === i); });
+    document.querySelector('.nav').textContent = (i + 1) + ' / ' + pages.length + '　← → 翻頁';
+  }
+  addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+  });
+  addEventListener('beforeprint', function(){ document.body.classList.remove('deck'); });
+  addEventListener('afterprint',  function(){ document.body.classList.add('deck'); });
+  show(0);
+</script>

@@ -1,0 +1,60 @@
+"""
+單頁擷取範本（Scrapling）
+========================
+
+適合：你已知道目標網址 + 想抓的欄位選擇器，要寫一支可重複跑的小工具。
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from scrapling.fetchers import Fetcher, DynamicFetcher, StealthyFetcher
+
+
+def fetch(url: str, mode: str):
+    if mode == "fast":
+        return Fetcher.get(url, impersonate="chrome", timeout=30)
+    if mode == "dynamic":
+        return DynamicFetcher.fetch(url, network_idle=True, timeout=30_000)
+    if mode == "stealthy":
+        return StealthyFetcher.fetch(url, headless=True, solve_cloudflare=True, timeout=60_000)
+    raise SystemExit(f"unknown mode: {mode}")
+
+
+def extract(page) -> dict:
+    """改這裡：照你的目標網站把欄位寫好。"""
+    return {
+        "title":   page.css("h1::text").get(),
+        "summary": page.css("meta[name=description]::attr(content)").get(),
+        "items":   page.css(".item .name::text").getall(),
+    }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("url")
+    ap.add_argument("--mode", choices=["fast", "dynamic", "stealthy"], default="fast")
+    ap.add_argument("--out", default="-")
+    args = ap.parse_args()
+
+    page = fetch(args.url, args.mode)
+    if page.status >= 400:
+        print(f"[錯誤] HTTP {page.status}", file=sys.stderr)
+        return page.status
+
+    data = extract(page)
+    blob = json.dumps(data, ensure_ascii=False, indent=2)
+
+    if args.out == "-":
+        print(blob)
+    else:
+        Path(args.out).write_text(blob, encoding="utf-8")
+        print(f"OK → {args.out}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

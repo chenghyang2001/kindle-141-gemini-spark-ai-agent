@@ -1,0 +1,12 @@
+# Python／執行期
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude/
+practice/**/.claude/
+# 當機殘留
+*.stackdump
+core
+*.core
+*.dmp

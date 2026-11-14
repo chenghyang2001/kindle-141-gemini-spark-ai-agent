@@ -1,0 +1,205 @@
+{
+ "book": "K141",
+ "title": "Google Gemini Spark AI 代理人跨域落地師全攻略",
+ "mode": "prompt-drill",
+ "window_layout": "螢幕 3 橫式左右兩半：左＝教練、右＝練習",
+ "practice_dir": "practice",
+ "units": [
+  {
+   "id": "ch00",
+   "num": 0,
+   "title": "開課第一步：讓 Spark 認識你",
+   "exercises": 2,
+   "file": "prompts/ch00.md"
+  },
+  {
+   "id": "ch01",
+   "num": 1,
+   "title": "把需求講清楚，AI 才做得對",
+   "exercises": 2,
+   "file": "prompts/ch01.md"
+  },
+  {
+   "id": "ch02",
+   "num": 2,
+   "title": "收件匣不再爆炸",
+   "exercises": 2,
+   "file": "prompts/ch02.md"
+  },
+  {
+   "id": "ch03",
+   "num": 3,
+   "title": "行事曆與待辦自己排",
+   "exercises": 2,
+   "file": "prompts/ch03.md"
+  },
+  {
+   "id": "ch04",
+   "num": 4,
+   "title": "一句話登記，試算表自己長",
+   "exercises": 2,
+   "file": "prompts/ch04.md"
+  },
+  {
+   "id": "ch05",
+   "num": 5,
+   "title": "一次生成多頁可編輯簡報",
+   "exercises": 2,
+   "file": "prompts/ch05.md"
+  },
+  {
+   "id": "ch06",
+   "num": 6,
+   "title": "設好排程，早上 7 點自動報到",
+   "exercises": 2,
+   "file": "prompts/ch06.md"
+  },
+  {
+   "id": "ch07",
+   "num": 7,
+   "title": "教它一個新技能",
+   "exercises": 2,
+   "file": "prompts/ch07.md"
+  },
+  {
+   "id": "ch08",
+   "num": 8,
+   "title": "把調好的提示詞，變成拿得走的技能",
+   "exercises": 2,
+   "file": "prompts/ch08.md"
+  },
+  {
+   "id": "ch09",
+   "num": 9,
+   "title": "我的 AI 班級秘書",
+   "exercises": 2,
+   "file": "prompts/ch09.md"
+  },
+  {
+   "id": "ch10",
+   "num": 10,
+   "title": "每天早上的經營簡報與會議秘書",
+   "exercises": 2,
+   "file": "prompts/ch10.md"
+  },
+  {
+   "id": "ch11",
+   "num": 11,
+   "title": "上班族的個人工作流",
+   "exercises": 2,
+   "file": "prompts/ch11.md"
+  },
+  {
+   "id": "ch12",
+   "num": 12,
+   "title": "客戶關係與行銷小幫手",
+   "exercises": 2,
+   "file": "prompts/ch12.md"
+  },
+  {
+   "id": "ch13",
+   "num": 13,
+   "title": "接案工作室的自動化秘書",
+   "exercises": 2,
+   "file": "prompts/ch13.md"
+  },
+  {
+   "id": "ch14",
+   "num": 14,
+   "title": "Spark + GAS 雲端神搭配",
+   "exercises": 2,
+   "file": "prompts/ch14.md"
+  },
+  {
+   "id": "ch15",
+   "num": 15,
+   "title": "Spark 幫你上網辦事",
+   "exercises": 2,
+   "file": "prompts/ch15.md"
+  },
+  {
+   "id": "ch16",
+   "num": 16,
+   "title": "隱私、安全與團隊使用規範",
+   "exercises": 2,
+   "file": "prompts/ch16.md"
+  },
+  {
+   "id": "ch17",
+   "num": 17,
+   "title": "畢業製作：打造自己的 AI 秘書",
+   "exercises": 2,
+   "file": "prompts/ch17.md"
+  },
+  {
+   "id": "ch18",
+   "num": 18,
+   "title": "Spark 指令與技能生成器",
+   "exercises": 2,
+   "file": "prompts/ch18.md"
+  },
+  {
+   "id": "ch19",
+   "num": 19,
+   "title": "Spark 技能庫",
+   "exercises": 3,
+   "file": "prompts/ch19.md"
+  },
+  {
+   "id": "ch20",
+   "num": 20,
+   "title": "免費資料與 API 大補帖",
+   "exercises": 1,
+   "file": "prompts/ch20.md"
+  },
+  {
+   "id": "ch21",
+   "num": 21,
+   "title": "提示詞與指令資源",
+   "exercises": 1,
+   "file": "prompts/ch21.md"
+  },
+  {
+   "id": "ch22",
+   "num": 22,
+   "title": "素材與圖庫",
+   "exercises": 1,
+   "file": "prompts/ch22.md"
+  },
+  {
+   "id": "ch23",
+   "num": 23,
+   "title": "官方說明與更新怎麼追",
+   "exercises": 1,
+   "file": "prompts/ch23.md"
+  },
+  {
+   "id": "ch24",
+   "num": 24,
+   "title": "延伸學習",
+   "exercises": 1,
+   "file": "prompts/ch24.md"
+  },
+  {
+   "id": "ch25",
+   "num": 25,
+   "title": "AI 模型 API 資源",
+   "exercises": 1,
+   "file": "prompts/ch25.md"
+  },
+  {
+   "id": "ch26",
+   "num": 26,
+   "title": "NVIDIA Build 免費 AI API",
+   "exercises": 1,
+   "file": "prompts/ch26.md"
+  },
+  {
+   "id": "ch27",
+   "num": 27,
+   "title": "全書總複習",
+   "exercises": 1,
+   "file": "prompts/ch27.md"
+  }
+ ]
+}

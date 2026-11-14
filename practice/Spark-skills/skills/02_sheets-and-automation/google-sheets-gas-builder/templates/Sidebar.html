@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        padding: 16px;
+        color: #202124;
+        background-color: #ffffff;
+      }
+      h2 {
+        font-size: 16px;
+        color: #1a73e8;
+        margin-top: 0;
+      }
+      p {
+        font-size: 13px;
+        color: #5f6368;
+        line-height: 1.4;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+        background-color: #1a73e8;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        box-sizing: border-box;
+      }
+      .btn:hover {
+        background-color: #1557b0;
+      }
+      .btn:disabled {
+        background-color: #dadce0;
+        cursor: not-allowed;
+      }
+      #statusMessage {
+        margin-top: 16px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        display: none;
+      }
+      .success {
+        background-color: #e6f4ea;
+        color: #137333;
+        border: 1px solid #ceead6;
+      }
+      .error {
+        background-color: #fce8e6;
+        color: #c5221f;
+        border: 1px solid #fad2cf;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>自動化工具箱控制台</h2>
+    <p>請點擊下方按鈕以開始執行試算表自動化批次處理流程：</p>
+    
+    <button id="actionBtn" class="btn" onclick="handleExecute()">開始批次處理</button>
+
+    <div id="statusMessage"></div>
+
+    <script>
+      function handleExecute() {
+        const btn = document.getElementById('actionBtn');
+        const statusDiv = document.getElementById('statusMessage');
+        
+        btn.disabled = true;
+        btn.innerText = '處理中...';
+        statusDiv.style.display = 'none';
+
+        // 呼叫伺服器端 GAS 函式
+        google.script.run
+          .withSuccessHandler(function() {
+            btn.disabled = false;
+            btn.innerText = '開始批次處理';
+            showStatus('作業已成功完成！', 'success');
+          })
+          .withFailureHandler(function(err) {
+            btn.disabled = false;
+            btn.innerText = '開始批次處理';
+            showStatus('發生錯誤：' + err.message, 'error');
+          })
+          .runBatchDataProcessing();
+      }
+
+      function showStatus(msg, type) {
+        const statusDiv = document.getElementById('statusMessage');
+        statusDiv.innerText = msg;
+        statusDiv.className = type;
+        statusDiv.style.display = 'block';
+      }
+    </script>
+  </body>
+</html>

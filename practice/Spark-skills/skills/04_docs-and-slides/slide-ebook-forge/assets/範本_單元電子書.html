@@ -1,0 +1,194 @@
+<meta charset="utf-8">
+<title>單元電子書範本</title>
+<!--
+  ============================================================
+  簡報電子書 template 起手式（雙輸出：翻頁簡報 HTML ＋ 成書 PDF）
+  ------------------------------------------------------------
+  用法：
+    1. 複製本檔為 <單元>_ebook_template.html
+    2. 填內容（八區塊，見 references/eight-blocks.md）
+    3. 程式碼位置放 <!--G1--> <!--G2--> … 標記，別手貼程式碼
+    4. 跑 scripts/build_book.py 產出 <單元>_ebook.html
+  ⚠️ 改內容一律改 template，別改產出的 _ebook.html（會被覆蓋）
+  螢幕：翻頁簡報（← → 空白鍵切頁）  列印：淺色書籍版型
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#24211d; --ink-soft:#5b544c; --line:#e2ddd4;
+    --accent:#e2551f;            /* 橘紅系強調色 */
+    --accent-soft:#fdf0e9;
+    --paper:#fffdf9;             /* 米白紙感 */
+    --code-bg:#faf7f2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e8e4dc;color:var(--ink);
+       font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
+       line-height:1.85;}
+
+  /* ---------- 一頁 ---------- */
+  .page{position:relative;background:var(--paper);width:210mm;min-height:297mm;
+        margin:18px auto;padding:21mm 18mm 20mm;box-shadow:0 6px 28px rgba(0,0,0,.14);}
+  .hd{position:absolute;top:9mm;left:18mm;right:18mm;display:flex;justify-content:space-between;
+      font-size:11px;color:var(--ink-soft);letter-spacing:.06em;
+      border-bottom:1px solid var(--line);padding-bottom:5px;}
+  .ft{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;
+      font-size:11px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:5px;}
+  .pg{font-variant-numeric:tabular-nums}   /* build_book.py 會自動重編 */
+
+  /* ---------- 封面 ---------- */
+  .cover{display:flex;flex-direction:column;justify-content:center;}
+  .cover .no{font-size:96px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-.02em}
+  .cover h1{font-size:34px;margin:14px 0 6px;letter-spacing:.01em}
+  .cover .sub{font-size:17px;color:var(--ink-soft);margin-bottom:34px}
+  .cards{display:flex;gap:12px}
+  .card{flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+  .card b{display:block;font-size:12px;color:var(--accent);letter-spacing:.08em;margin-bottom:4px}
+  /* ⚠️ 三張卡＝難度星等／要準備的／需要憑證。不放「預估時間」 */
+
+  /* ---------- 內文 ---------- */
+  h2{font-size:23px;margin:0 0 14px;padding-left:13px;border-left:5px solid var(--accent)}
+  h3{font-size:17px;margin:22px 0 8px;color:var(--accent)}
+  p{margin:0 0 12px}
+  .lead{background:var(--accent-soft);border-left:4px solid var(--accent);
+        padding:13px 16px;border-radius:0 8px 8px 0;margin:0 0 16px}
+  .note{border:1px dashed var(--line);border-radius:8px;padding:12px 15px;
+        background:#fff;margin:0 0 14px;font-size:15px}
+  table{width:100%;border-collapse:collapse;margin:0 0 15px;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left}
+  th{background:var(--accent-soft);font-weight:700}
+  ul,ol{margin:0 0 13px;padding-left:22px}
+  li{margin-bottom:5px}
+
+  /* ---------- 圖 ---------- */
+  .shot{display:block;border:1px solid var(--line);border-radius:8px;margin:0 auto 6px}
+  .cap{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:16px}
+
+  /* ---------- 程式碼（build_book.py 注入處）---------- */
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:9px;
+      padding:13px 15px;overflow:auto;margin:0 0 13px;
+      font:13px/1.66 "Cascadia Mono",Consolas,"Courier New",monospace;}
+  pre .k{color:#0b6fb8;font-weight:700}   /* 關鍵字 */
+  pre .s{color:#1d7a4d}                   /* 字串 */
+  pre .n{color:#b0431a}                   /* 數字 */
+  pre .c{color:#8d867c;font-style:italic} /* 註解 */
+  pre .f{color:#7c3aad;font-weight:700}   /* 函式名 */
+
+  .check{list-style:none;padding-left:2px}
+  .check li:before{content:"□ ";color:var(--accent);font-weight:700}
+
+  /* ---------- 螢幕：翻頁簡報 ---------- */
+  @media screen{
+    body.deck .page{display:none;margin:0;width:100vw;min-height:100vh;
+                    padding:6vh 8vw;box-shadow:none;overflow:auto}
+    body.deck .page.on{display:block}
+    body.deck .nav{position:fixed;right:16px;bottom:14px;background:#fff;border:1px solid var(--line);
+                   border-radius:999px;padding:7px 15px;font-size:13px;color:var(--ink-soft);
+                   box-shadow:0 2px 10px rgba(0,0,0,.1);z-index:9}
+  }
+  /* ---------- 列印：成書 PDF ---------- */
+  @media print{
+    body{background:#fff}
+    .page{margin:0;box-shadow:none;page-break-after:always;width:auto;min-height:auto}
+    .nav{display:none}
+    @page{size:A4;margin:0}
+  }
+</style>
+
+<!-- ============ 封面 ============ -->
+<section class="page cover">
+  <div class="no">U01</div>
+  <h1>單元名稱寫這裡</h1>
+  <div class="sub">一句副標：講清楚學完能做出什麼</div>
+  <div class="cards">
+    <div class="card"><b>難度</b>★★☆☆☆</div>
+    <div class="card"><b>要準備的</b>瀏覽器、Google 帳號</div>
+    <div class="card"><b>需要憑證</b>不需要</div>
+  </div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span></span></div>
+</section>
+
+<!-- ============ ① 先看成果 ============ -->
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>先看成果</span></div>
+  <h2>① 先看成果</h2>
+  <div class="lead">先看終點長什麼樣，再回頭一步一步做。</div>
+  <img class="shot" style="width:96%;margin:0 auto" src="real/annotated/m01.png" alt="">
+  <div class="cap">▲ 做完之後的畫面</div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">02</span></div>
+</section>
+
+<!-- ============ ② Vibe Coding ============ -->
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>把需求講清楚</span></div>
+  <h2>② 把需求講清楚</h2>
+  <table>
+    <tr><th style="width:50%">這樣問 ❌</th><th>這樣問 ✅</th></tr>
+    <tr><td>幫我寫個程式</td><td>目標＋步驟＋輸入輸出都講明白</td></tr>
+  </table>
+  <h3>本單元完整提示詞（整段複製）</h3>
+  <pre>把提示詞放這裡。不用技術字眼，用「目標敘述 ＋ 需求步驟化」。</pre>
+  <div class="note"><b>為什麼要這樣寫：</b>說明這段提示詞的設計理由。</div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">03</span></div>
+</section>
+
+<!-- ============ ⑤ 跟著做（截圖頁範例）============ -->
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>跟著老師做一次</span></div>
+  <h2>⑤ 跟著老師做一次</h2>
+  <h3>步驟 1：先開啟選單</h3>
+  <p>說明這一步在做什麼。</p>
+  <img class="shot" style="width:93%;margin:0 auto" src="real/annotated/m02.png" alt="">
+  <div class="cap">▲ 圈起來的地方就是要點的位置</div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">04</span></div>
+</section>
+
+<!-- ============ ⑥ 程式碼（build_book.py 注入）============ -->
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>程式碼與解說</span></div>
+  <h2>⑥ 程式碼全文與中文解說</h2>
+  <pre><!--G1--></pre>
+  <div class="note"><b>這段在做什麼：</b>白話解說。<br><b>哪裡可以改成自己的：</b>指出可調整處。</div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">05</span></div>
+</section>
+
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>程式碼與解說</span></div>
+  <pre><!--G2--></pre>
+  <div class="note"><b>這段在做什麼：</b>白話解說。</div>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">06</span></div>
+</section>
+
+<!-- ============ ⑦ 驗收 ============ -->
+<section class="page">
+  <div class="hd"><span>UNIT 01 · 單元名稱</span><span>成果驗收</span></div>
+  <h2>⑦ 成果驗收清單</h2>
+  <ul class="check">
+    <li>選單出現了</li>
+    <li>按下去有反應</li>
+    <li>資料寫進去了</li>
+    <li>重跑不會重複</li>
+  </ul>
+  <h2 style="margin-top:26px">⑧ 程式碼下載</h2>
+  <p>本單元程式碼檔名：<b>U01_單元名稱.gs</b></p>
+  <div class="ft"><span>講師名 · 課程名稱</span><span class="pg">07</span></div>
+</section>
+
+<div class="nav">← → 翻頁</div>
+<script>
+  // 螢幕上以翻頁簡報呈現；列印時自動變回逐頁書籍版型
+  document.body.classList.add('deck');
+  var pages = document.querySelectorAll('.page'), i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(pages.length - 1, n));
+    pages.forEach(function(p, k){ p.classList.toggle('on', k === i); });
+    document.querySelector('.nav').textContent = (i + 1) + ' / ' + pages.length + '　← → 翻頁';
+  }
+  addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(i - 1); }
+  });
+  addEventListener('beforeprint', function(){ document.body.classList.remove('deck'); });
+  addEventListener('afterprint',  function(){ document.body.classList.add('deck'); });
+  show(0);
+</script>
