@@ -10,3 +10,5 @@ practice/**/.claude/
 core
 *.core
 *.dmp
+practice/run2/seg
+practice/run2/coach.txt
