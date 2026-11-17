@@ -96,7 +96,7 @@ $prompt"
   local t0=$SECONDS rc
   ( cd "$PRACTICE_DIR" && env -u CLAUDECODE -u CLAUDE_CODE_ENTRYPOINT \
       claude -p "$full" --settings '{"disableAllHooks":true}' --permission-mode acceptEdits --allowedTools mcp__claude_ai_Gmail mcp__claude_ai_Google_Calendar mcp__claude_ai_Google_Drive WebSearch WebFetch Skill "Bash(python:*)" "Bash(ls:*)" \
-      --disallowedTools mcp__claude_ai_Gmail__send_message mcp__claude_ai_Gmail__reply mcp__claude_ai_Gmail__trash_message mcp__claude_ai_Gmail__trash_thread "Bash(git:*)" ) | tee "$out_file"
+      --disallowedTools mcp__claude_ai_Gmail__send_message mcp__claude_ai_Gmail__reply mcp__claude_ai_Gmail__forward mcp__claude_ai_Notify_Server mcp__claude_ai_Gmail__trash_message mcp__claude_ai_Gmail__trash_thread "Bash(git:*)" ) | tee "$out_file"
   rc=${PIPESTATUS[0]}
   echo
   if [ "$rc" -ne 0 ]; then echo -e "${R}（claude 結束碼 $rc）${N}"; else echo -e "${D}✔ 完成，用時 $((SECONDS - t0)) 秒，全文存在 run2/$CH_TAG/練習$m.md${N}"; fi
