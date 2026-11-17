@@ -1,4 +1,4 @@
-video	{'error': True, 'code': 'UNEXPECTED_ERROR', 'message': "Unexpected error: Missing required cookies: __Secure-1PSIDTS\nThis typically means --browser-cookies extraction was incomplete (Chrome 127+ App-Bound Encryption can cause silent partial reads). Run 'notebooklm login' to re-authenticate."}
-audio	{'error': True, 'code': 'UNEXPECTED_ERROR', 'message': "Unexpected error: Missing required cookies: __Secure-1PSIDTS\nThis typically means --browser-cookies extraction was incomplete (Chrome 127+ App-Bound Encryption can cause silent partial reads). Run 'notebooklm login' to re-authenticate."}
-slide	{'error': True, 'code': 'UNEXPECTED_ERROR', 'message': "Unexpected error: Missing required cookies: __Secure-1PSIDTS\nThis typically means --browser-cookies extraction was incomplete (Chrome 127+ App-Bound Encryption can cause silent partial reads). Run 'notebooklm login' to re-authenticate."}
-mindmap	{'error': True, 'code': 'UNEXPECTED_ERROR', 'message': "Unexpected error: Missing required cookies: __Secure-1PSIDTS\nThis typically means --browser-cookies extraction was incomplete (Chrome 127+ App-Bound Encryption can cause silent partial reads). Run 'notebooklm login' to re-authenticate."}
+video	5f40cdc7-9128-465a-8c4a-a9c2cc4e3369
+audio	c8040227-f470-4a2e-b3dc-96ce25e324ff
+slide	c6ec38c0-30a0-474a-912f-d6aa07105166
+mindmap	e926400e-f0c3-4c3f-ae4b-8d65b06de77f
