@@ -22,7 +22,7 @@ raw_ch="${1:-}"; [ -z "$raw_ch" ] && usage
 raw_ch="${raw_ch#ch}"
 if ! [[ "$raw_ch" =~ ^[0-9]+$ ]]; then echo -e "${R}錯誤：章號要是數字，收到「$1」${N}" >&2; usage; fi
 CH=$((10#$raw_ch)); CH_TAG="$(printf 'ch%02d' "$CH")"
-MD="$REPO_DIR/prompts/$CH_TAG.md"
+MD="$REPO_DIR/${K141_PROMPTS:-prompts-cc}/$CH_TAG.md"   # 2026-11-17 起預設 Claude Code 版教材
 [ -f "$MD" ] || { echo -e "${R}錯誤：找不到教材 $MD${N}" >&2; exit 1; }
 
 START="${2:-1}"
@@ -52,6 +52,7 @@ exercise_field() {
     /^## / { inex = 0 }
     !inex { next }
     /^\*\*目的\*\*/ { if (f == "goal") { g = $0; sub(/^\*\*目的\*\*(：|:) */, "", g); print g }; next }
+    /^\*\*控制台接手\*\*/ { if (f == "handoff") { h = $0; sub(/^\*\*控制台接手\*\*(：|:) */, "", h); print h }; next }
     /^```/ { if (mode == "code") { mode = "" } else if (!seen) { mode = "code"; seen = 1 }; next }
     mode == "code" { if (f == "prompt") print; next }
     /^\*\*觀察重點\*\*/ { mode = "watch"; next }
@@ -84,16 +85,18 @@ run_exercise() {
   # 教材裡的 practice/ 路徑在練習目錄下要去掉
   prompt="$(printf '%s' "$prompt" | sed 's#practice/##g')"
   local full="全自動執行：不要問我任何問題、不要用選擇題，所有選擇一律採用你的推薦，直接做完。
+安全規則：信件只存草稿絕不寄出；測試物件標題以「課程練習」開頭；不刪改非本次建立的東西；建立的真實物件記到 $CH_TAG/cleanup.md。
 回答會顯示在終端機上，請精簡（不超過 40 行），用條列與短表格。不要執行任何 git 指令（不 commit、不 push）。最後的回答要直接列出成果本身（精簡版），不要只說存了哪些檔。
 
 $prompt"
-  echo -e "${G}\$ claude -p  <<提示詞（Claude 扮演 Gemini Spark）${N}"
+  echo -e "${G}\$ claude -p  <<提示詞（Claude Code 實作，可用 Gmail／日曆／雲端硬碟）${N}"
   printf '%s\n' "$prompt" | sed "s/^/  /" | while IFS= read -r line; do echo -e "${G}${line}${N}"; done
   echo
   echo -e "${D}⏳ Claude 產出中（約 1～2 分鐘）…${N}"
   local t0=$SECONDS rc
   ( cd "$PRACTICE_DIR" && env -u CLAUDECODE -u CLAUDE_CODE_ENTRYPOINT \
-      claude -p --permission-mode acceptEdits "$full" ) | tee "$out_file"
+      claude -p "$full" --settings '{"disableAllHooks":true}' --permission-mode acceptEdits --allowedTools mcp__claude_ai_Gmail mcp__claude_ai_Google_Calendar mcp__claude_ai_Google_Drive WebSearch WebFetch Skill "Bash(python:*)" "Bash(ls:*)" \
+      --disallowedTools mcp__claude_ai_Gmail__send_message mcp__claude_ai_Gmail__reply mcp__claude_ai_Gmail__trash_message mcp__claude_ai_Gmail__trash_thread "Bash(git:*)" ) | tee "$out_file"
   rc=${PIPESTATUS[0]}
   echo
   if [ "$rc" -ne 0 ]; then echo -e "${R}（claude 結束碼 $rc）${N}"; else echo -e "${D}✔ 完成，用時 $((SECONDS - t0)) 秒，全文存在 run2/$CH_TAG/練習$m.md${N}"; fi
@@ -110,7 +113,7 @@ if seg 1 "$CH_TITLE"; then
     note "作者的例子："
     printf '%s\n' "$ex" | while IFS= read -r b; do echo "  • $b"; done
   fi
-  echo; note "本章共 $EX_COUNT 個練習，接下來每段讓 Claude 扮演 Spark 實際做一次。"
+  echo; note "本章共 $EX_COUNT 個練習，接下來每段由 Claude Code 實際做一次。"
   next
 fi
 
@@ -118,6 +121,8 @@ for ((m = 1; m <= EX_COUNT; m++)); do
   if seg $((m + 1)) "練習 $m：$(exercise_field "$m" title)"; then
     goal="$(exercise_field "$m" goal)"
     [ -n "$goal" ] && note "目的：$goal" && echo
+    handoff="$(exercise_field "$m" handoff)"
+    [ -n "$handoff" ] && note "控制台接手：$handoff（練習格做完後由第 ① 格執行）" && echo
     run_exercise "$m" "$(exercise_field "$m" prompt)"
     note "觀察重點："
     exercise_field "$m" watch | while IFS= read -r w; do echo "  • $w"; done
